@@ -46,12 +46,11 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
                 throw std::runtime_error("Double quotes not permitted outside fields");
             }
 
-            // Find last quote
+            // Find one past last quote
             const auto last_quote = std::find_if(it, end, [](const char c){
                 return c != '"';
             });
             const auto num_quotes = std::distance(it, last_quote);
-            const bool last = last_quote == end; // end of string?
 
             if((num_quotes % 2) == 0) { // even number of quotes
                 if(field.empty()) { // only quotes in this field
@@ -75,11 +74,11 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
             }
 
             it = last_quote;
-            --it;
-            if(!in_quotes && !last && *(it + 1) != sep) {
-                // If next character after double quote is not a separator
-                throw std::runtime_error("Invalid character / unknown separator after a field: " + *(it + 1));
+            if(!in_quotes && it != end && *(it) != sep) {
+                // If next character after field ending quote is not a separator
+                throw std::runtime_error("Invalid character / unknown separator after a field: " + *(it));
             }
+            --it;
         }
         else if(c == sep && !in_quotes) {
             // Separator ends field
