@@ -52,18 +52,13 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
             });
             const auto num_quotes = std::distance(it, last_quote);
 
-            if((num_quotes % 2) == 0) { // even number of quotes
-                if(field.empty()) { // only quotes in this field
-                    if(num_quotes == 2 && c == sep) { // empty field
-                        *out++ = "";
-                    }
-                    else {
-                        field.append(((num_quotes - 2) / 2), '"');
-                    }
+            if(num_quotes % 2 == 0) {
+                // Even number of quotes, either an empty field or encoded quotes
+                int quotes = num_quotes / 2;
+                if(field.empty()) {
+                    quotes = num_quotes == 2 ? 0 : (num_quotes - 2) / 2;
                 }
-                else {
-                    field.append((num_quotes / 2), '"');
-                }
+                field.append(quotes, '"');
             }
             else {
                 // Odd number of quotes, a field should either start or end
