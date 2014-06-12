@@ -51,6 +51,13 @@ TEST_F(ParserTest, NonQuotedFields)
     EXPECT_TRUE(vec_eq("hello", "world", "100.0"));
 }
 
+TEST_F(ParserTest, NonQuotedFieldsWithMixedQuotes)
+{
+    ASSERT_ANY_THROW(parse(R"(thisisa"long"word)"));
+
+    ASSERT_ANY_THROW(parse(R"(thisisa""long""word)"));
+}
+
 TEST_F(ParserTest, QuotedFields)
 {
     parse(R"("hello")");

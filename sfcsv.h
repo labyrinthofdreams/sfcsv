@@ -41,9 +41,8 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
     for(auto it = s.begin(), end = s.end(); it != end; ++it) {
         const char c = *it;
         if(c == '"') {
-            // Not sure if this is ever even possible?
             if(!in_quotes && !field.empty()) {
-                throw std::runtime_error("Double quotes not permitted outside fields");
+                throw std::runtime_error("Double quotes not permitted in non-quoted fields");
             }
 
             // Find one past last quote
