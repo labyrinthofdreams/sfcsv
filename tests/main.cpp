@@ -110,8 +110,13 @@ TEST_F(ParserTest, EmbeddedQuotes)
 
     parse(R"("""hello world""")");
     EXPECT_TRUE(vec_eq(R"("hello world")"));
+}
 
-	// (Embedded) quotes outside double-quoted fields are not permitted
+/**
+ * Embedded quotes outside double-quoted fields are not permitted
+ */
+TEST_F(ParserTest, EmbeddedQuotesInvalid)
+{
     EXPECT_ANY_THROW(parse(R"(hello "world")"));
 
     EXPECT_ANY_THROW(parse(R"("hello" world)"));
@@ -119,7 +124,7 @@ TEST_F(ParserTest, EmbeddedQuotes)
     EXPECT_ANY_THROW(parse(R"(hello ""world"")"));
 
     EXPECT_ANY_THROW(parse(R"(""hello"" world)"));
-	
+
     EXPECT_ANY_THROW(parse(R"(""hello world"")"));
 
     EXPECT_ANY_THROW(parse(R"(hello """world""")"));
