@@ -57,9 +57,7 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
             else {
                 // Odd number of quotes, a field should either start or end
                 in_quotes = !in_quotes;
-                if(num_quotes > 1) {
-                    field.append(((num_quotes - 1) / 2), '"');
-                }
+                field.append(((num_quotes - 1) / 2), '"');
             }
 
             it = last_quote;
