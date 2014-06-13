@@ -10,8 +10,8 @@
 
 namespace sfcsv {
 
-template <class OutIter>
-void parse_line(const std::string&, OutIter, const char);
+template <class StringT, class OutIter>
+void parse_line(const StringT& s, OutIter out, const char sep = ',');
 
 std::vector<std::string> parse_line(const std::string &s, const char sep = ',') {
     std::vector<std::string> out;
@@ -22,19 +22,22 @@ std::vector<std::string> parse_line(const std::string &s, const char sep = ',') 
 }
 
 /**
- * @brief Parse a CSV line from std::string
+ * @brief Parse a CSV line from string
+ * @pre Parameter s must have begin()/end() that satisfy InputIterator
+ * @pre Parameter s must be default initializable
+ * @pre Parameter s must have operator+=
  * @pre Parameter out must satisfy OutputIterator
  * @param out Output iterator
  * @param sep Field separator
  * @throws std::runtime_error
  */
-template <class OutIter>
-void parse_line(const std::string& s, OutIter out, const char sep = ',') {
+template <class StringT, class OutIter>
+void parse_line(const StringT& s, OutIter out, const char sep = ',') {
     bool in_quotes = false;
-    std::string field;
+    StringT field;
 
     for(auto it = s.begin(), end = s.end(); it != end; ++it) {
-        const char c = *it;
+        const auto c = *it;
         if(c == '"') {
             if(!in_quotes && !field.empty()) {
                 throw std::runtime_error("Double quotes not permitted in non-quoted fields");
