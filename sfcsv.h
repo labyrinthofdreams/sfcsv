@@ -73,9 +73,7 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
             field.erase();
         }
         else if(c == '\n' && !in_quotes) {
-            // Newline characters are not permitted
-            // outside of double-quoted fields
-            throw std::runtime_error("Invalid newline character not within a field");
+            throw std::runtime_error("Newline characters are not permitted in non-quoted fields");
         }
         else if(c == ' ' && !in_quotes) {
             throw std::runtime_error("Spaces are not permitted in non-quoted fields");
