@@ -64,7 +64,7 @@ void parse_line(const StringT& s, OutIter out, const char sep = ',') {
             it = last_quote;
             if(!in_quotes && it != end && *(it) != sep) {
                 // If next character after field ending quote is not a separator
-                throw std::runtime_error("Invalid character / unknown separator after a field: " + *(it));
+                throw std::runtime_error("Invalid separator after a field: " + *(it));
             }
             --it;
         }
