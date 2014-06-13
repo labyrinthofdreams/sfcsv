@@ -31,7 +31,7 @@ std::vector<std::string> parse_line(const std::string &s, const char sep = ',') 
 template <class OutIter>
 void parse_line(const std::string& s, OutIter out, const char sep = ',') {
     bool in_quotes = false;
-    std::string field = "";
+    std::string field;
 
     for(auto it = s.begin(), end = s.end(); it != end; ++it) {
         const char c = *it;
