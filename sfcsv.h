@@ -48,10 +48,8 @@ void parse_line(const std::string& s, OutIter out, const char sep = ',') {
 
             if(num_quotes % 2 == 0) {
                 // Even number of quotes, either an empty field or encoded quotes
-                int quotes = num_quotes / 2;
-                if(field.empty()) {
-                    quotes = num_quotes == 2 ? 0 : (num_quotes - 2) / 2;
-                }
+                const auto quotes = field.empty() ? ((num_quotes - 2) / 2)
+                                                  : (num_quotes / 2);
                 field.append(quotes, '"');
             }
             else {
