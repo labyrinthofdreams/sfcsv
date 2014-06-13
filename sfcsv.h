@@ -29,7 +29,10 @@ std::vector<std::string> parse_line(const std::string &s, const char sep = ',') 
  * @pre Parameter out must satisfy OutputIterator
  * @param out Output iterator
  * @param sep Field separator
- * @throws std::runtime_error
+ * @throws std::runtime_error If double quotes in non-quoted fields
+ * @throws std::runtime_error If invalid separator after a field
+ * @throws std::runtime_error If newline character in non-quoted field
+ * @throws std::runtime_error If space in non-quoted field
  */
 template <class StringT, class OutIter>
 void parse_line(const StringT& s, OutIter out, const char sep = ',') {
