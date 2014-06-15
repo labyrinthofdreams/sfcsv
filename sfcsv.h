@@ -38,7 +38,11 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
             });
             const auto num_quotes = std::distance(it, last_quote);
 
+            // Embdedded or empty group
             const bool embedded = num_quotes % 2 == 0;
+
+            // Ignore enclosing quotes for groups in fields with only quotes,
+            // zero for embedded, and one for groups that start or end a field
             const auto ignore_quotes = embedded ? (field.empty() ? 2 : 0) : 1;
             field.append(((num_quotes - ignore_quotes) / 2), '"');
 
