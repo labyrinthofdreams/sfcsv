@@ -76,15 +76,26 @@ TEST_F(ParserTest, QuotedFields)
  */
 TEST_F(ParserTest, NonQuotedFieldsWithSpaces)
 {
-    ASSERT_ANY_THROW(parse("hello world"));
+    parse("hello world");
+    EXPECT_TRUE(vec_eq("hello world"));
 
-    ASSERT_ANY_THROW(parse("hello world,bye world"));
+    parse("hello      world");
+    EXPECT_TRUE(vec_eq("hello      world"));
 
-    ASSERT_ANY_THROW(parse("hello, world"));
+    parse("hello world,bye world");
+    EXPECT_TRUE(vec_eq("hello world", "bye world"));
 
-    ASSERT_ANY_THROW(parse("hello ,world"));
+    parse("hello, world");
+    EXPECT_TRUE(vec_eq("hello", " world"));
 
-    ASSERT_ANY_THROW(parse("hello , world"));
+    parse("hello ,world");
+    EXPECT_TRUE(vec_eq("hello ", "world"));
+
+    parse("hello , world");
+    EXPECT_TRUE(vec_eq("hello ", " world"));
+
+    parse(" hello,world ");
+    EXPECT_TRUE(vec_eq(" hello", "world "));
 }
 
 TEST_F(ParserTest, QuotedFieldsWithSpaces)

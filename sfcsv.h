@@ -32,7 +32,6 @@ std::vector<std::string> parse_line(const std::string &s, const char sep = ',') 
  * @throws std::runtime_error If double quotes in non-quoted fields
  * @throws std::runtime_error If invalid separator after a field
  * @throws std::runtime_error If newline character in non-quoted field
- * @throws std::runtime_error If space in non-quoted field
  */
 template <class StringT, class OutIter>
 void parse_line(const StringT& s, OutIter out, const char sep = ',') {
@@ -78,9 +77,6 @@ void parse_line(const StringT& s, OutIter out, const char sep = ',') {
         }
         else if(c == '\n' && !in_quotes) {
             throw std::runtime_error("Newline characters are not permitted in non-quoted fields");
-        }
-        else if(c == ' ' && !in_quotes) {
-            throw std::runtime_error("Spaces are not permitted in non-quoted fields");
         }
         else {
             field += c;
