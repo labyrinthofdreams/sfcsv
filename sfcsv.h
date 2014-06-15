@@ -37,16 +37,12 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
             });
             const auto num_quotes = std::distance(it, last_quote);
 
-            if(num_quotes % 2 == 0) {
-                // Even number of quotes, either an empty field or embedded quotes
-                const auto quotes = field.empty() ? ((num_quotes - 2) / 2)
-                                                  : (num_quotes / 2);
-                field.append(quotes, '"');
-            }
-            else {
-                // Odd number of quotes, a field either starts or ends
+            const bool embedded = num_quotes % 2 == 0;
+            const auto ignore_quotes = embedded ? (field.empty() ? 2 : 0) : 1;
+            field.append(((num_quotes - ignore_quotes) / 2), '"');
+
+            if(!embedded) {
                 in_quotes = !in_quotes;
-                field.append(((num_quotes - 1) / 2), '"');
             }
 
             it = last_quote;
