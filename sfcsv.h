@@ -87,7 +87,7 @@ void parse_line(const StringT& s, OutIter out, const char sep = ',') {
 template <class StringT>
 StringT encode_field(const StringT& s) {
     StringT out;
-    // Reserve space for old string, surrounding quotes, duplicated quotes
+    // Reserve space for old string, enclosing quotes, and embedded quotes
     out.reserve(s.size() + 2 + std::count(std::begin(s), std::end(s), '"'));
     out += '"';
     for(const auto c : s) {
