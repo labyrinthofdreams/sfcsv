@@ -2,24 +2,9 @@
 #define SFCSV_H
 
 #include <algorithm>
-#include <iterator>
-#include <sstream>
 #include <stdexcept>
-#include <string>
-#include <vector>
 
 namespace sfcsv {
-
-template <class StringT, class OutIter>
-void parse_line(const StringT& s, OutIter out, const char sep = ',');
-
-std::vector<std::string> parse_line(const std::string &s, const char sep = ',') {
-    std::vector<std::string> out;
-
-    parse_line(s, std::back_inserter(out), sep);
-
-    return out;
-}
 
 /**
  * @brief Parse a CSV line from string

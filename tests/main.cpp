@@ -16,7 +16,9 @@ protected:
     }
 
     void parse(const std::string& s) {
-        result = sfcsv::parse_line(s);
+        decltype(result) tmp;
+        sfcsv::parse_line(s, std::back_inserter(tmp));
+        tmp.swap(result);
         for(const auto& r : result) {
             all.push_back(r);
         }
