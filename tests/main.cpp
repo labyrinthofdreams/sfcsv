@@ -72,10 +72,6 @@ TEST_F(ParserTest, QuotedFields)
     EXPECT_TRUE(vec_eq("hello", "world", "foobar"));
 }
 
-/**
- * By default, spaces are not allowed in non-quoted fields
- * nor in quoted fields between the separator
- */
 TEST_F(ParserTest, NonQuotedFieldsWithSpaces)
 {
     parse("hello world");
@@ -118,7 +114,6 @@ TEST_F(ParserTest, MixedFields)
     EXPECT_TRUE(vec_eq("hello", "world", "foo"));
 }
 
-// Test fields with embedded quotes
 TEST_F(ParserTest, EmbeddedQuotes)
 {
 
@@ -132,9 +127,6 @@ TEST_F(ParserTest, EmbeddedQuotes)
     EXPECT_TRUE(vec_eq(R"("hello world")"));
 }
 
-/**
- * Embedded quotes outside double-quoted fields are not permitted
- */
 TEST_F(ParserTest, EmbeddedQuotesInvalid)
 {
     EXPECT_ANY_THROW(parse(R"(hello "world")"));
@@ -152,7 +144,6 @@ TEST_F(ParserTest, EmbeddedQuotesInvalid)
     EXPECT_ANY_THROW(parse(R"("""hello""" world)"));
 }
 
-// Test fields with embedded delimiters
 TEST_F(ParserTest, EmbeddedDelimiters)
 {
     parse(R"(",hello")");
@@ -165,7 +156,6 @@ TEST_F(ParserTest, EmbeddedDelimiters)
     EXPECT_TRUE(vec_eq("hello, world"));
 }
 
-// Test empty fields
 TEST_F(ParserTest, EmptyFields)
 {
     parse(R"("")");
@@ -194,7 +184,6 @@ TEST_F(ParserTest, EmptyFields)
     EXPECT_TRUE(vec_eq("hello", ""));
 }
 
-// Test fields that have only double quotes
 TEST_F(ParserTest, FieldsWithOnlyDoubleQuotes)
 {
 	// ", ", ", "
@@ -217,7 +206,6 @@ TEST_F(ParserTest, FieldsWithOnlyDoubleQuotes)
     EXPECT_TRUE(vec_eq(R"("")", R"("")", R"("")"));
 }
 
-// Test fields with multiple lines with \n characters
 TEST_F(ParserTest, MultilineFields)
 {	
     parse("\"hello\nworld\"");
@@ -231,7 +219,6 @@ TEST_F(ParserTest, MultilineFields)
     EXPECT_ANY_THROW(parse("hello world,hello\nworld"));
 }
 
-// Test odd number of quotes inside quoted fields
 TEST_F(ParserTest, OddQuotesInsideField)
 {
     EXPECT_ANY_THROW(parse(R"(""Hello" odd quotes")"));
