@@ -11,6 +11,7 @@ namespace sfcsv {
  * @pre Parameter s must have begin()/end() that satisfy InputIterator
  * @pre Parameter s must be default initializable
  * @pre Parameter s must have operator+=
+ * @pre Parameter s must have value_type
  * @pre Parameter out must satisfy OutputIterator
  * @param out Output iterator
  * @param sep Field separator
@@ -18,10 +19,10 @@ namespace sfcsv {
  * @throws std::runtime_error If invalid separator after a field
  * @throws std::runtime_error If newline character in non-quoted field
  */
-template <class StringT, class OutIter>
-void parse_line(const StringT& s, OutIter out, const char sep = ',') {
+template <class StringT, class OutIter, class CharT = class StringT::value_type>
+void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
     bool in_quotes = false;
-    StringT field;
+    StringT field;    
 
     for(auto it = s.begin(), end = s.end(); it != end; ++it) {
         const auto c = *it;
