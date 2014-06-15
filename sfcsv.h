@@ -8,11 +8,12 @@ namespace sfcsv {
 
 /**
  * @brief Parse a CSV line from string
- * @pre Parameter s must have begin()/end() that satisfy InputIterator
- * @pre Parameter s must be default initializable
- * @pre Parameter s must have operator+=
- * @pre Parameter s must have value_type
- * @pre Parameter out must satisfy OutputIterator
+ * @pre StringT must have begin()/end() that satisfy InputIterator
+ * @pre StringT must be default initializable
+ * @pre StringT must have operator+=
+ * @pre StringT must have value_type
+ * @pre StringT must have append(count, char)
+ * @pre OutIter out must satisfy OutputIterator
  * @param out Output iterator
  * @param sep Field separator
  * @throws std::runtime_error If double quotes in non-quoted fields
