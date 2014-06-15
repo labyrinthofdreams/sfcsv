@@ -15,9 +15,9 @@ protected:
         return result == std::vector<std::string>({args...});
     }
 
-    void parse(const std::string& s) {
+    void parse(const std::string& s, const char sep = ',') {
         decltype(result) tmp;
-        sfcsv::parse_line(s, std::back_inserter(tmp));
+        sfcsv::parse_line(s, std::back_inserter(tmp), sep);
         tmp.swap(result);
         for(const auto& r : result) {
             all.push_back(r);
@@ -245,6 +245,23 @@ TEST_F(ParserTest, OddQuotesInsideField)
     EXPECT_ANY_THROW(parse(R"("Hello """odd""" quotes")"));
 
     EXPECT_ANY_THROW(parse(R"("Hello odd """quotes"""")"));
+}
+
+TEST_F(ParserTest, Separator)
+{
+    EXPECT_ANY_THROW(parse(R"("hello","world")", ';'));
+
+    parse("hello;world", ';');
+    EXPECT_TRUE(vec_eq("hello", "world"));
+
+    parse("hello\tworld", '\t');
+    EXPECT_TRUE(vec_eq("hello", "world"));
+
+    parse(R"("hello";"world")", ';');
+    EXPECT_TRUE(vec_eq("hello", "world"));
+
+    parse("\"hello\"\t\"world\"", '\t');
+    EXPECT_TRUE(vec_eq("hello", "world"));
 }
 
 int main(int argc, char **argv)
