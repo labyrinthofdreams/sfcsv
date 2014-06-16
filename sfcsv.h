@@ -13,7 +13,7 @@ namespace sfcsv {
  * @pre StringT must have operator+=
  * @pre StringT must have value_type
  * @pre StringT must have append(count, char)
- * @pre OutIter out must satisfy OutputIterator
+ * @pre OutIter must satisfy OutputIterator
  * @param out Output iterator
  * @param sep Field separator
  * @throws std::runtime_error If double quotes in non-quoted fields
@@ -80,9 +80,10 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
  * This function duplicates all quote characters
  * and encloses the string with quote characters
  *
- * @pre Parameter s must have .reserve(size), operator+=,
- * and it must have .begin()/.end() that satisfy InputIterator
- *
+ * @pre StringT must have .reserve(size)
+ * @pre StringT must have operator+=
+ * @pre StringT must have .begin()/.end() that satisfy InputIterator
+ * @pre StringT must be default initializable
  * @param s String to encode
  * @return Encoded string
  */
@@ -104,8 +105,8 @@ StringT encode_field(const StringT& s) {
 
 /**
  * @brief Encode strings from iterator range start to end
- * @pre Start and end parameters must satisfy InputIterator
- * @pre Out parameter must satisfy OutputIterator.
+ * @pre InIter must satisfy InputIterator
+ * @pre OutIter must satisfy OutputIterator
  * @param start Iterator to the begin position
  * @param end Iterator to the end position
  * @param out Iterator to output
