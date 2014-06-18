@@ -136,8 +136,8 @@ StringT encode_field(const StringT& s) {
  * @param out Iterator to output
  * @param sep Field separator
  */
-template <class InIter, class OutIter, class Char = char>
-void encode_line(InIter start, InIter end, OutIter out, const Char* sep = ",") {
+template <class InIter, class OutIter, class CharT = char>
+void encode_line(InIter start, InIter end, OutIter out, const CharT* sep = ",") {
     while(start != end) {
         *out++ = encode_field(*start);
         if(++start != end) {
