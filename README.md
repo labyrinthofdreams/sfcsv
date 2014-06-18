@@ -40,14 +40,14 @@ one;two;three
 one\ttwo\tthree
 ```
 
-####API usage:
+####API usage - parse_line:
 
 ```c++
 template <class StringT, class OutIter, class CharT = class StringT::value_type>
 void parse_line(const StringT& s, OutIter out, const CharT sep = ',');
 ```
 
-**Examples**:
+#####Examples:
 
 Parsing from a string:  
 ```c++
@@ -67,6 +67,8 @@ while(std::getline(infile, line)) {
 }
 ```
 
+####API usage - encode_line:
+
 ```c++
 template <class InIter, class OutIter, class Char = char>
 void encode_line(InIter start, InIter end, OutIter out, const Char* sep = ",");
@@ -74,7 +76,7 @@ void encode_line(InIter start, InIter end, OutIter out, const Char* sep = ",");
 
 Note that the separator is a string literal
 
-**Examples**:
+#####Examples:
 
 Encoding into a string:  
 ```c++
