@@ -21,8 +21,10 @@ But you can't have embedded quotes in fields without quotes:
 ```"hello "world"","hello """world"""```
 
 Empty fields work like so:  
-```,,,  
-"","","",""```
+```
+,,,  
+"","","",""
+```
 
 Fields with only quotes work as well:  
 ```"""","""""",""""""""```
@@ -33,8 +35,10 @@ Newlines must be inside quoted fields, otherwise it fails:
 And all the different field types can be mixed.
 
 The separator can be changed too, e.g.:  
-```one;two;three  
-one\ttwo\tthree```
+```
+one;two;three  
+one\ttwo\tthree
+```
 
 ####API usage:
 
