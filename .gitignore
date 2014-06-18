@@ -1,5 +1,8 @@
+# Blacklist
 *
+# Whitelist
 !tests/
 !.gitignore
+!README.md
 !*.h
 !*.cpp
