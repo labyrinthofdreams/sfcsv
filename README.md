@@ -27,10 +27,10 @@ Empty fields work like so:
 ```
 
 Fields with only quotes work as well:  
-```"""","""""",""""""""```
+`"""","""""",""""""""`
 
 Newlines must be inside quoted fields, otherwise it fails:  
-```"hello\nworld"```
+`"hello\nworld"`
 
 And all the different field types can be mixed.
 
