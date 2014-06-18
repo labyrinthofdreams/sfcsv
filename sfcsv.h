@@ -32,7 +32,7 @@ namespace sfcsv {
 
 /**
  * @brief Parse a CSV line from string
- * @pre StringT must have begin()/end() that satisfy InputIterator
+ * @pre StringT must have cbegin()/cend() that satisfy InputIterator
  * @pre StringT must be default initializable
  * @pre StringT must have operator+=
  * @pre StringT must have value_type
@@ -49,7 +49,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
     bool in_quotes = false;
     StringT field;    
 
-    for(auto it = s.begin(), end = s.end(); it != end; ++it) {
+    for(auto it = s.cbegin(), end = s.cend(); it != end; ++it) {
         const auto c = *it;
         if(c == '"') {
             if(!in_quotes && !field.empty()) {
