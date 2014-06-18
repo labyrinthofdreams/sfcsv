@@ -51,7 +51,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',');
 
 Parsing from a string:  
 ```c++
-std::string csv("one,two,three");
+std::string csv("one;two;three");
 std::vector<std::string> parsed;
 parse_line(csv, std::back_inserter(parsed), ';');
 ```
