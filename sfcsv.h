@@ -57,7 +57,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
             }
 
             // Find one past last quote
-            const auto last_quote = std::find_if(it, end, [](const char c){
+            const auto last_quote = std::find_if(it, end, [](const CharT c){
                 return c != '"';
             });
             const auto num_quotes = std::distance(it, last_quote);
