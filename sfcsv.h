@@ -83,7 +83,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
         }
         else if(c == sep && !in_quotes) {
             // Separator ends field
-            *out++ = field;
+            *out++ = std::move(field);
             field.erase();
         }
         else if(c == '\n' && !in_quotes) {
@@ -95,7 +95,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
     }
 
     // Push last field in result
-    *out++ = field;
+    *out++ = std::move(field);
 }
 
 /**
