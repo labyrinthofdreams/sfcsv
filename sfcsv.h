@@ -84,7 +84,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
         else if(c == sep && !in_quotes) {
             // Separator ends field
             *out++ = std::move(field);
-            field.erase();
+            field.clear();
         }
         else if(c == '\n' && !in_quotes) {
             throw std::runtime_error("Newline characters are not permitted in non-quoted fields");
