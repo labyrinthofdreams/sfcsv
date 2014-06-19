@@ -1,5 +1,8 @@
 ###SFCSV - Simple & Fast CSV parser
 
+SFCSV is a single header CSV parser/encoder written in C++
+with no external dependencies. The tests require Googletest.
+
 What works (see tests/main.cpp):
 
 Fields without quotes:  
@@ -70,8 +73,8 @@ while(std::getline(infile, line)) {
 ####API usage - encode_line:
 
 ```c++
-template <class InIter, class OutIter, class Char = char>
-void encode_line(InIter start, InIter end, OutIter out, const Char* sep = ",");
+template <class InIter, class OutIter, class CharT = char>
+void encode_line(InIter start, InIter end, OutIter out, const CharT* sep = ",");
 ```
 
 Note that the separator is a string literal
