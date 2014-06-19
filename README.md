@@ -53,7 +53,7 @@ Parsing from a string:
 ```c++
 std::string csv("one;two;three");
 std::vector<std::string> parsed;
-parse_line(csv, std::back_inserter(parsed), ';');
+sfcsv::parse_line(csv, std::back_inserter(parsed), ';');
 ```
 
 Parsing from a file:  
@@ -62,7 +62,7 @@ std::ifstream infile("stats.csv");
 std::string line;
 while(std::getline(infile, line)) {
     std::vector<std::string> parsed;
-    parse_line(line, std::back_inserter(parsed), ';');
+    sfcsv::parse_line(line, std::back_inserter(parsed), ';');
     // ... do something with parsed row ...
 }
 ```
@@ -82,12 +82,12 @@ Encoding into a string:
 ```c++
 std::vector<std::string> cols {"hello", "world", "and", "universe"};
 std::ostringstream os;
-encode_line(cols.cbegin(), cols.cend(), std::ostream_iterator<std::string>(os), ";");
+sfcsv::encode_line(cols.cbegin(), cols.cend(), std::ostream_iterator<std::string>(os), ";");
 std::string s = os.str();
 ```
 
 Outputting to stdout:  
 ```c++
 std::vector<std::string> cols {"hello", "world", "and", "universe"};
-encode_line(cols.cbegin(), cols.cend(), std::ostream_iterator<std::string>(std::cout), ";");
+sfcsv::encode_line(cols.cbegin(), cols.cend(), std::ostream_iterator<std::string>(std::cout), ";");
 ```
