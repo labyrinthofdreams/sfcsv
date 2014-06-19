@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include <algorithm>
 #include <stdexcept>
+#include <utility>
 
 namespace sfcsv {
 
