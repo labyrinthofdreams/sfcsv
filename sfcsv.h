@@ -33,6 +33,10 @@ THE SOFTWARE.
 
 namespace sfcsv {
 
+struct CsvError : public std::runtime_error {
+    CsvError(const char *msg) : std::runtime_error(msg) {}
+};
+
 /**
  * @brief Parse a CSV line from string
  * @pre StringT must have cbegin()/cend() that satisfy InputIterator
@@ -56,7 +60,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
         const auto c = *it;
         if(c == '"') {
             if(!in_quotes && !field.empty()) {
-                throw std::runtime_error("Double quotes not permitted in non-quoted fields");
+                throw CsvError("Double quotes not permitted in non-quoted fields");
             }
 
             // Find one past last quote
@@ -80,7 +84,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
             it = last_quote;
             if(!in_quotes && it != end && *(it) != sep) {
                 // If next character after field ending quote is not a separator
-                throw std::runtime_error("Invalid separator after a field: " + *(it));
+                throw CsvError("Invalid separator after a field: " + *(it));
             }
             --it;
         }
@@ -90,7 +94,7 @@ void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
             field.clear();
         }
         else if(c == '\n' && !in_quotes) {
-            throw std::runtime_error("Newline characters are not permitted in non-quoted fields");
+            throw CsvError("Newline characters are not permitted in non-quoted fields");
         }
         else {
             field += c;
