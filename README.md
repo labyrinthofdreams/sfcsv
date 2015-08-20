@@ -59,11 +59,18 @@ Note: Even number of consecutive quotes are still treated normally!
 
 Note: Unlike in quoted fields, quotes always match source count 
 
+####Structures:
+
+enum class Mode {
+    Strict,
+    Loose
+};
+
 ####API usage - parse_line:
 
 ```c++
 template <class StringT, class OutIter, class CharT = class StringT::value_type>
-void parse_line(const StringT& s, OutIter out, const CharT sep = ',');
+void parse_line(const StringT& s, OutIter out, const CharT sep = ',', const Mode mode = Mode::Strict);
 ```
 
 #####Examples:
