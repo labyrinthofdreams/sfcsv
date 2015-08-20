@@ -43,6 +43,22 @@ one;two;three
 one\ttwo\tthree
 ```
 
+You can enabled LOOSE mode, which does the following:
+
+1) Allow single quotes inside quoted fields:
+`"abc"def"ghi" => abc"def"ghi`
+`"abc""def""ghi" => abc"def"ghi`
+`"abc"""def"""ghi" => abc"""def"""ghi` 
+
+Note: Even number of consecutive quotes are still treated normally!
+
+2) Allow single quotes in non-quoted fields:
+`abc"def"ghi => abc"def"ghi`
+`abc""def""ghi => abc""def""ghi`
+`abc"""def"""ghi => abc"""def"""ghi`
+
+Note: Unlike in quoted fields, quotes always match source count 
+
 ####API usage - parse_line:
 
 ```c++

@@ -41,9 +41,9 @@ protected:
         return result == std::vector<std::string>({args...});
     }
 
-    void parse(const std::string& s, const char sep = ',') {
+    void parse(const std::string& s, const char sep = ',', const sfcsv::Mode mode = sfcsv::Mode::Strict) {
         decltype(result) tmp;
-        sfcsv::parse_line(s, std::back_inserter(tmp), sep);
+        sfcsv::parse_line(s, std::back_inserter(tmp), sep, mode);
         tmp.swap(result);
         for(const auto& r : result) {
             all.push_back(r);
@@ -275,6 +275,29 @@ TEST_F(ParserTest, Separator)
 
     parse("\"hello\"\t\"world\"", '\t');
     EXPECT_TRUE(vec_eq("hello", "world"));
+}
+
+TEST_F(ParserTest, LooseDoubleQuotesInField)
+{
+    EXPECT_NO_THROW(parse(R"(hello,"this is not a "film",world)", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello", "this is not a \"film", "world"));
+
+    EXPECT_NO_THROW(parse(R"(hello,"this is not a ""film",world)", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello", "this is not a \"film", "world"));
+
+    EXPECT_NO_THROW(parse(R"(hello,"this is not a """film",world)", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello", "this is not a \"\"\"film", "world"));
+
+
+
+    EXPECT_NO_THROW(parse(R"(hello,aa"bb,world)", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello", "aa\"bb", "world"));
+
+    EXPECT_NO_THROW(parse(R"(hello,aa""bb,world)", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello", "aa\"\"bb", "world"));
+
+    EXPECT_NO_THROW(parse(R"(hello,aa"""bb,world)", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello", "aa\"\"\"bb", "world"));
 }
 
 int main(int argc, char **argv)

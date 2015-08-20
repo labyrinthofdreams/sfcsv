@@ -33,8 +33,19 @@ THE SOFTWARE.
 
 namespace sfcsv {
 
+/**
+ * @brief Exception class for csv errors
+ */
 struct CsvError : public std::runtime_error {
     CsvError(const char *msg) : std::runtime_error(msg) {}
+};
+
+/**
+ * @brief Parser mode
+ */
+enum class Mode {
+    Strict,
+    Loose
 };
 
 /**
@@ -52,41 +63,54 @@ struct CsvError : public std::runtime_error {
  * @throws std::runtime_error If newline character in non-quoted field
  */
 template <class StringT, class OutIter, class CharT = class StringT::value_type>
-void parse_line(const StringT& s, OutIter out, const CharT sep = ',') {
+void parse_line(const StringT& s, OutIter out, 
+                const CharT sep = ',', const Mode mode = Mode::Strict) {
     bool in_quotes = false;
     StringT field;    
 
     for(auto it = s.cbegin(), end = s.cend(); it != end; ++it) {
         const auto c = *it;
         if(c == '"') {
-            if(!in_quotes && !field.empty()) {
+            if(!in_quotes && !field.empty() && mode == Mode::Strict) {
                 throw CsvError("Double quotes not permitted in non-quoted fields");
             }
-
-            // Find one past last quote
-            const auto last_quote = std::find_if(it, end, [](const CharT c){
-                return c != '"';
-            });
-            const auto num_quotes = std::distance(it, last_quote);
-
-            // Enclosing quote starts or ends a field
-            const bool enclosing = num_quotes % 2 != 0;
-
-            // Ignore one quote for an enclosing group, two for an empty field
-            // or field with only quotes, and zero for embedded groups
-            const auto ignore_quotes = enclosing ? 1 : (field.empty() ? 2 : 0);
-            field.append(((num_quotes - ignore_quotes) / 2), '"');
-
-            if(enclosing) {
-                in_quotes = !in_quotes;
+            else if(!in_quotes && !field.empty() && mode == Mode::Loose) {
+                field += '"';
             }
+            else {
+                // Find one past last quote
+                const auto last_quote = std::find_if(it, end, [](const CharT c){
+                    return c != '"';
+                });
+                const auto num_quotes = std::distance(it, last_quote);
 
-            it = last_quote;
-            if(!in_quotes && it != end && *(it) != sep) {
-                // If next character after field ending quote is not a separator
-                throw CsvError("Invalid separator after a field: " + *(it));
+                // Enclosing quote starts or ends a field
+                const bool enclosing = num_quotes % 2 != 0;
+
+                if(in_quotes && enclosing && last_quote != end
+                        && *(last_quote) != sep && mode == Mode::Loose) {
+                    field.append(num_quotes, '"');
+                    it = last_quote;
+                }
+                else {
+                    // Ignore one quote for an enclosing group, two for an empty field
+                    // or field with only quotes, and zero for embedded groups
+                    const auto ignore_quotes = enclosing ? 1 : (field.empty() ? 2 : 0);
+                    field.append(((num_quotes - ignore_quotes) / 2), '"');
+
+                    if(enclosing) {
+                        in_quotes = !in_quotes;
+                    }
+
+                    it = last_quote;
+                    if(!in_quotes && it != end && *(it) != sep && mode == Mode::Strict) {
+                            // If next character after field ending quote is not a separator
+                            throw CsvError("Invalid separator after a field: " + *(it));
+                    }
+                }
+
+                --it;
             }
-            --it;
         }
         else if(c == sep && !in_quotes) {
             // Separator ends field
