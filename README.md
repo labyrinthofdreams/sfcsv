@@ -43,19 +43,19 @@ one;two;three
 one\ttwo\tthree
 ```
 
-You can enablee a "loose" mode which does the following:
+You can enable a "loose" mode which does the following:
 
-1) Allow single quotes inside quoted fields:
-`"abc"def"ghi" => abc"def"ghi`
-`"abc""def""ghi" => abc"def"ghi`
-`"abc"""def"""ghi" => abc"""def"""ghi` 
+1) Allow single quotes inside quoted fields:  
+`"abc"def" => abc"def`  
+`"abc""def" => abc"def`  
+`"abc"""def" => abc"""def` 
 
 Note: Even number of consecutive quotes are still treated normally!
 
-2) Allow single quotes in non-quoted fields:
-`abc"def"ghi => abc"def"ghi`
-`abc""def""ghi => abc""def""ghi`
-`abc"""def"""ghi => abc"""def"""ghi`
+2) Allow single quotes in non-quoted fields:  
+`abc"def => abc"def`  
+`abc""def => abc""def`  
+`abc"""def => abc"""def`  
 
 Note: Unlike in quoted fields, quotes always match source count 
 
