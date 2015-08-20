@@ -43,7 +43,7 @@ one;two;three
 one\ttwo\tthree
 ```
 
-You can enabled LOOSE mode, which does the following:
+You can enablee a "loose" mode which does the following:
 
 1) Allow single quotes inside quoted fields:
 `"abc"def"ghi" => abc"def"ghi`
