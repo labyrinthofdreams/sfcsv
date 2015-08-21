@@ -56,9 +56,11 @@ enum class Mode {
  * @pre StringT must have value_type
  * @pre StringT must have append(count, char)
  * @pre OutIter must satisfy OutputIterator
+ * @param s String to parse
  * @param out Output iterator
  * @param sep Field separator
- * @throws std::runtime_error If double quotes in non-quoted fields
+ * @param mode Parsing mode
+ * @throws std::runtime_error If double quotes in non-quoted fields (strict mode)
  * @throws std::runtime_error If invalid separator after a field
  * @throws std::runtime_error If newline character in non-quoted field
  */
