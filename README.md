@@ -45,14 +45,14 @@ one\ttwo\tthree
 
 You can enable a "loose" mode which does the following:
 
-1) Allow single quotes inside quoted fields:  
+1) Allow odd quotes inside quoted fields:  
 `"abc"def" => abc"def`  
 `"abc""def" => abc"def`  
 `"abc"""def" => abc"""def` 
 
 Note: Even number of consecutive quotes are still treated normally!
 
-2) Allow single quotes in non-quoted fields:  
+2) Allow quotes in non-quoted fields:  
 `abc"def => abc"def`  
 `abc""def => abc""def`  
 `abc"""def => abc"""def`  
@@ -61,7 +61,7 @@ Note: Unlike in quoted fields, quotes always match source count
 
 3) Allow newlines in non-quoted fields:
 
-hello\nworld
+`hello\nworld`
 
 ####Structures:
 
