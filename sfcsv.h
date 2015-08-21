@@ -126,8 +126,8 @@ void parse_line(const StringT& s, OutIter out,
 
                     it = last_quote;
                     if(!in_quotes && it != end && *(it) != sep && mode == Mode::Strict) {
-                            // If next character after field ending quote is not a separator
-                            throw csv_error("Invalid separator after a field");
+                        // If next character after field ending quote is not a separator
+                        throw csv_error("Invalid separator after a field");
                     }
                 }
 
@@ -176,6 +176,7 @@ StringT encode_field(const StringT& s) {
             out += c;
         }
     }
+
     out += '"';
     return out;
 }
