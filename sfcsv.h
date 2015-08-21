@@ -36,8 +36,8 @@ namespace sfcsv {
 /**
  * @brief Exception class for csv errors
  */
-struct CsvError : public std::runtime_error {
-    CsvError(const char *msg) : std::runtime_error(msg) {}
+struct csv_error : public std::runtime_error {
+    csv_error(const char *msg) : std::runtime_error(msg) {}
 };
 
 /**
@@ -67,15 +67,16 @@ void parse_line(const StringT& s, OutIter out,
                 const CharT sep = ',', const Mode mode = Mode::Strict) {
     bool in_quotes = false;
     StringT field;    
-
     for(auto it = s.cbegin(), end = s.cend(); it != end; ++it) {
         const auto c = *it;
         if(c == '"') {
-            if(!in_quotes && !field.empty() && mode == Mode::Strict) {
-                throw CsvError("Double quotes not permitted in non-quoted fields");
-            }
-            else if(!in_quotes && !field.empty() && mode == Mode::Loose) {
-                field += '"';
+            if(!in_quotes && !field.empty()) {
+                if(mode == Mode::Loose) {
+                    field += '"';
+                }
+                else {
+                    throw csv_error("Double quotes not permitted in non-quoted fields");
+                }
             }
             else {
                 // Find one past last quote
@@ -105,7 +106,7 @@ void parse_line(const StringT& s, OutIter out,
                     it = last_quote;
                     if(!in_quotes && it != end && *(it) != sep && mode == Mode::Strict) {
                             // If next character after field ending quote is not a separator
-                            throw CsvError("Invalid separator after a field: " + *(it));
+                            throw csv_error("Invalid separator after a field: " + *(it));
                     }
                 }
 
@@ -118,7 +119,7 @@ void parse_line(const StringT& s, OutIter out,
             field.clear();
         }
         else if(c == '\n' && !in_quotes) {
-            throw CsvError("Newline characters are not permitted in non-quoted fields");
+            throw csv_error("Newline characters are not permitted in non-quoted fields");
         }
         else {
             field += c;
