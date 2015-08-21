@@ -59,6 +59,10 @@ Note: Even number of consecutive quotes are still treated normally!
 
 Note: Unlike in quoted fields, quotes always match source count 
 
+3) Allow newlines in non-quoted fields:
+
+hello\nworld
+
 ####Structures:
 
 enum class Mode {

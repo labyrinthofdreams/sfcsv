@@ -300,6 +300,12 @@ TEST_F(ParserTest, LooseDoubleQuotesInField)
     EXPECT_TRUE(vec_eq("hello", "aa\"\"\"bb", "world"));
 }
 
+TEST_F(ParserTest, LooseNewlinesInNonQuotedFields)
+{
+    EXPECT_NO_THROW(parse("hello\nworld", ',', sfcsv::Mode::Loose));
+    EXPECT_TRUE(vec_eq("hello\nworld"));
+}
+
 int main(int argc, char **argv)
 {    
     testing::InitGoogleTest(&argc, argv);

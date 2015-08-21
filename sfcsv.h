@@ -62,7 +62,7 @@ enum class Mode {
  * @param mode Parsing mode
  * @throws std::runtime_error If double quotes in non-quoted fields (strict mode)
  * @throws std::runtime_error If invalid separator after a field
- * @throws std::runtime_error If newline character in non-quoted field
+ * @throws std::runtime_error If newline character in non-quoted field (strict mode)
  */
 template <class StringT, class OutIter, class CharT = class StringT::value_type>
 void parse_line(const StringT& s, OutIter out, 
@@ -120,7 +120,7 @@ void parse_line(const StringT& s, OutIter out,
             *out++ = std::move(field);
             field.clear();
         }
-        else if(c == '\n' && !in_quotes) {
+        else if(c == '\n' && !in_quotes && mode == Mode::Strict) {
             throw csv_error("Newline characters are not permitted in non-quoted fields");
         }
         else {
