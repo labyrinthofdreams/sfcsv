@@ -49,12 +49,30 @@ enum class Mode {
 };
 
 /**
+ * @brief Default policy for strings
+ */
+struct DefaultPolicy {
+    template <class StringT, class CharT = typename StringT::value_type>
+    static void append(StringT &str, const CharT c) {
+        str += c;
+    }
+
+    template <class StringT, class CharT = typename StringT::value_type>
+    static void append(StringT &str, const unsigned count, const CharT c) {
+        str.append(count, c);
+    }
+
+    template <class StringT>
+    static bool empty(const StringT &str) {
+        return str.empty();
+    }
+};
+
+/**
  * @brief Parse a CSV line from string
  * @pre StringT must have cbegin()/cend() that satisfy InputIterator
  * @pre StringT must be default initializable
- * @pre StringT must have operator+=
  * @pre StringT must have value_type
- * @pre StringT must have append(count, char)
  * @pre OutIter must satisfy OutputIterator
  * @param s String to parse
  * @param out Output iterator
@@ -64,7 +82,8 @@ enum class Mode {
  * @throws std::runtime_error If invalid separator after a field
  * @throws std::runtime_error If newline character in non-quoted field (strict mode)
  */
-template <class StringT, class OutIter, class CharT = class StringT::value_type>
+template <class StringPolicy = DefaultPolicy, class StringT, class OutIter,
+          class CharT = class StringT::value_type>
 void parse_line(const StringT& s, OutIter out, 
                 const CharT sep = ',', const Mode mode = Mode::Strict) {
     bool in_quotes = false;
@@ -72,9 +91,9 @@ void parse_line(const StringT& s, OutIter out,
     for(auto it = s.cbegin(), end = s.cend(); it != end; ++it) {
         const auto c = *it;
         if(c == '"') {
-            if(!in_quotes && !field.empty()) {
+            if(!in_quotes && !StringPolicy::empty(field)) {
                 if(mode == Mode::Loose) {
-                    field += '"';
+                    StringPolicy::append(field, '"');
                 }
                 else {
                     throw csv_error("Double quotes not permitted in non-quoted fields");
@@ -92,14 +111,14 @@ void parse_line(const StringT& s, OutIter out,
 
                 if(in_quotes && enclosing && last_quote != end
                         && *(last_quote) != sep && mode == Mode::Loose) {
-                    field.append(num_quotes, '"');
+                    StringPolicy::append(field, num_quotes, '"');
                     it = last_quote;
                 }
                 else {
                     // Ignore one quote for an enclosing group, two for an empty field
                     // or field with only quotes, and zero for embedded groups
-                    const auto ignore_quotes = enclosing ? 1 : (field.empty() ? 2 : 0);
-                    field.append(((num_quotes - ignore_quotes) / 2), '"');
+                    const auto ignore_quotes = enclosing ? 1 : (StringPolicy::empty(field) ? 2 : 0);
+                    StringPolicy::append(field, ((num_quotes - ignore_quotes) / 2), '"');
 
                     if(enclosing) {
                         in_quotes = !in_quotes;
@@ -108,7 +127,7 @@ void parse_line(const StringT& s, OutIter out,
                     it = last_quote;
                     if(!in_quotes && it != end && *(it) != sep && mode == Mode::Strict) {
                             // If next character after field ending quote is not a separator
-                            throw csv_error("Invalid separator after a field: " + *(it));
+                            throw csv_error("Invalid separator after a field");
                     }
                 }
 
@@ -124,7 +143,7 @@ void parse_line(const StringT& s, OutIter out,
             throw csv_error("Newline characters are not permitted in non-quoted fields");
         }
         else {
-            field += c;
+            StringPolicy::append(field, c);
         }
     }
 

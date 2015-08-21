@@ -28,6 +28,8 @@ THE SOFTWARE.
 #include <iterator>
 #include <vector>
 #include <string>
+#include <QList>
+#include <QString>
 #include "sfcsv.h"
 #include "gtest/gtest.h"
 
@@ -304,6 +306,35 @@ TEST_F(ParserTest, LooseNewlinesInNonQuotedFields)
 {
     EXPECT_NO_THROW(parse("hello\nworld", ',', sfcsv::Mode::Loose));
     EXPECT_TRUE(vec_eq("hello\nworld"));
+}
+
+struct QtStringPolicy {
+    template <class StringT, class CharT = typename StringT::value_type>
+    static void append(StringT &str, const CharT c) {
+        str.append(c);
+    }
+
+    template <class StringT, class CharT = typename StringT::value_type>
+    static void append(StringT &str, const unsigned count, const CharT c) {
+        for(unsigned i = 0; i < count; ++i) {
+            str.append(c);
+        }
+    }
+
+    template <class StringT>
+    static bool empty(const StringT &str) {
+        return str.isEmpty();
+    }
+};
+
+TEST_F(ParserTest, QStringTest)
+{
+    QList<QString> parsed;
+    QString str = "hello,world";
+    sfcsv::parse_line<QtStringPolicy>(str, std::back_inserter(parsed), ',');
+    EXPECT_TRUE(parsed.size() == 2);
+    EXPECT_TRUE(parsed.at(0) == "hello");
+    EXPECT_TRUE(parsed.at(1) == "world");
 }
 
 int main(int argc, char **argv)
