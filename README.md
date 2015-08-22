@@ -105,7 +105,7 @@ while(std::getline(infile, line)) {
 ```
 
 Parsing Qt QStrings:
-```
+```c++
 struct QtStringPolicy {
     template <class StringT, class CharT = typename StringT::value_type>
     static void append(StringT &str, const CharT c) {
