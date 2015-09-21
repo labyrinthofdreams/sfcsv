@@ -23,7 +23,7 @@ But you can't have embedded quotes in fields without quotes:
 ...Or an uneven number of quotes:  
 ```"hello "world"","hello """world"""```
 
-Embedded delimiters work as well:
+Embedded delimiters work as well:  
 `"commas,work,too"`
 
 Empty fields work like so:  
