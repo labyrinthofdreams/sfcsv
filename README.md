@@ -24,7 +24,7 @@ But you can't have embedded quotes in fields without quotes:
 ```"hello "world"","hello """world"""```
 
 Embedded delimiters work as well:
-```"commas,work,too"```
+`"commas,work,too"`
 
 Empty fields work like so:  
 ```
