@@ -157,3 +157,36 @@ Outputting to stdout:
 std::vector<std::string> cols {"hello", "world", "and", "universe"};
 sfcsv::encode_line(cols.cbegin(), cols.cend(), std::ostream_iterator<std::string>(std::cout), ";");
 ```
+
+Encoding to QString:
+```c++
+template <class T>
+class qstring_inserter : public std::iterator<std::output_iterator_tag, T> {
+    QString &_s;
+
+public:
+    qstring_inserter(QString &s) : _s(s) {}
+    qstring_inserter& operator++() {
+        return *this;
+    }
+    qstring_inserter operator++(int) {
+        return *this;
+    }
+    qstring_inserter& operator*() {
+        return *this;
+    }
+    qstring_inserter& operator=(const QString &s) {
+        _s += s;
+        return *this;
+    }
+};
+
+template<class T>
+qstring_inserter<T> make_qstring_inserter(T &s) {
+    return qstring_inserter<T>(s);
+}
+
+QList<QString> items {"hello", "world", "and", "universe"};
+QString csv;
+sfcsv::encode_line(items.cbegin(), items.cend(), make_qstring_inserter(csv));
+```
