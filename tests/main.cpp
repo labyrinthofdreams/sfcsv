@@ -43,7 +43,7 @@ protected:
         return result == std::vector<std::string>({args...});
     }
 
-    void parse(const std::string& s, const char sep = ',', const sfcsv::Mode mode = sfcsv::Mode::Strict) {
+    void parse(const std::string& s, const char sep = ',', const sfcsv::mode mode = sfcsv::mode::strict) {
         decltype(result) tmp;
         sfcsv::parse_line(s, std::back_inserter(tmp), sep, mode);
         tmp.swap(result);
@@ -281,30 +281,30 @@ TEST_F(ParserTest, Separator)
 
 TEST_F(ParserTest, LooseDoubleQuotesInField)
 {
-    EXPECT_NO_THROW(parse(R"(hello,"this is not a "film",world)", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse(R"(hello,"this is not a "film",world)", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello", "this is not a \"film", "world"));
 
-    EXPECT_NO_THROW(parse(R"(hello,"this is not a ""film",world)", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse(R"(hello,"this is not a ""film",world)", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello", "this is not a \"film", "world"));
 
-    EXPECT_NO_THROW(parse(R"(hello,"this is not a """film",world)", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse(R"(hello,"this is not a """film",world)", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello", "this is not a \"\"\"film", "world"));
 
 
 
-    EXPECT_NO_THROW(parse(R"(hello,aa"bb,world)", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse(R"(hello,aa"bb,world)", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello", "aa\"bb", "world"));
 
-    EXPECT_NO_THROW(parse(R"(hello,aa""bb,world)", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse(R"(hello,aa""bb,world)", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello", "aa\"\"bb", "world"));
 
-    EXPECT_NO_THROW(parse(R"(hello,aa"""bb,world)", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse(R"(hello,aa"""bb,world)", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello", "aa\"\"\"bb", "world"));
 }
 
 TEST_F(ParserTest, LooseNewlinesInNonQuotedFields)
 {
-    EXPECT_NO_THROW(parse("hello\nworld", ',', sfcsv::Mode::Loose));
+    EXPECT_NO_THROW(parse("hello\nworld", ',', sfcsv::mode::loose));
     EXPECT_TRUE(vec_eq("hello\nworld"));
 }
 

@@ -68,16 +68,16 @@ Note: Unlike in quoted fields, quotes always match source count
 
 ####Structures:
 
-enum class Mode {
-    Strict,
-    Loose
+enum class mode {
+    strict,
+    loose
 };
 
 ####API usage - parse_line:
 
 ```c++
-template <class StringPolicy = DefaultPolicy, class StringT, class OutIter, class CharT = class StringT::value_type>
-void parse_line(const StringT& s, OutIter out, const CharT sep = ',', const Mode mode = Mode::Strict);
+template <class StringPolicy = default_policy, class StringT, class OutIter, class CharT = class StringT::value_type>
+void parse_line(const StringT& s, OutIter out, const CharT sep = ',', const mode pmode = mode::strict);
 ```
 
 #####Examples:
@@ -93,7 +93,7 @@ Parsing from a string in loose mode:
 ```c++
 std::string csv("one;two;three");
 std::vector<std::string> parsed;
-sfcsv::parse_line(csv, std::back_inserter(parsed), ';', sfcsv::Mode::Loose);
+sfcsv::parse_line(csv, std::back_inserter(parsed), ';', sfcsv::mode::Loose);
 ```
 
 Parsing from a file:  

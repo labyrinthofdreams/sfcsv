@@ -43,15 +43,15 @@ struct csv_error : public std::runtime_error {
 /**
  * @brief Parser mode
  */
-enum class Mode {
-    Strict,
-    Loose
+enum class mode {
+    strict,
+    loose
 };
 
 /**
  * @brief Default policy for strings
  */
-struct DefaultPolicy {
+struct default_policy {
     template <class StringT, class CharT = typename StringT::value_type>
     static void append(StringT &str, const CharT c) {
         str += c;
@@ -77,22 +77,22 @@ struct DefaultPolicy {
  * @param s String to parse
  * @param out Output iterator
  * @param sep Field separator
- * @param mode Parsing mode
+ * @param pmode Parsing mode
  * @throws std::runtime_error If double quotes in non-quoted fields (strict mode)
  * @throws std::runtime_error If invalid separator after a field
  * @throws std::runtime_error If newline character in non-quoted field (strict mode)
  */
-template <class StringPolicy = DefaultPolicy, class StringT, class OutIter,
+template <class StringPolicy = default_policy, class StringT, class OutIter,
           class CharT = class StringT::value_type>
 void parse_line(const StringT& s, OutIter out, 
-                const CharT sep = ',', const Mode mode = Mode::Strict) {
+                const CharT sep = ',', const mode pmode = mode::strict) {
     bool in_quotes = false;
     StringT field;    
     for(auto it = s.cbegin(), end = s.cend(); it != end; ++it) {
         const auto c = *it;
         if(c == '"') {
             if(!in_quotes && !StringPolicy::empty(field)) {
-                if(mode == Mode::Loose) {
+                if(pmode == mode::loose) {
                     StringPolicy::append(field, '"');
                 }
                 else {
@@ -110,7 +110,7 @@ void parse_line(const StringT& s, OutIter out,
                 const bool enclosing = num_quotes % 2 != 0;
 
                 if(in_quotes && enclosing && last_quote != end
-                        && *(last_quote) != sep && mode == Mode::Loose) {
+                        && *(last_quote) != sep && pmode == mode::loose) {
                     StringPolicy::append(field, num_quotes, '"');
                     it = last_quote;
                 }
@@ -125,7 +125,7 @@ void parse_line(const StringT& s, OutIter out,
                     }
 
                     it = last_quote;
-                    if(!in_quotes && it != end && *(it) != sep && mode == Mode::Strict) {
+                    if(!in_quotes && it != end && *(it) != sep && pmode == mode::strict) {
                         // If next character after field ending quote is not a separator
                         throw csv_error("Invalid separator after a field");
                     }
@@ -139,7 +139,7 @@ void parse_line(const StringT& s, OutIter out,
             *out++ = std::move(field);
             field.clear();
         }
-        else if(c == '\n' && !in_quotes && mode == Mode::Strict) {
+        else if(c == '\n' && !in_quotes && pmode == mode::strict) {
             throw csv_error("Newline characters are not permitted in non-quoted fields");
         }
         else {
