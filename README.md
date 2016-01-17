@@ -68,10 +68,12 @@ Note: Unlike in quoted fields, quotes always match source count
 
 ####Structures:
 
+```c++
 enum class mode {
     strict,
     loose
 };
+```
 
 ####API usage - parse_line:
 
